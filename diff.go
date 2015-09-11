@@ -85,7 +85,10 @@ func (w diffWriter) diff(av, bv reflect.Value) {
 		}
 	case reflect.Struct:
 		for i := 0; i < av.NumField(); i++ {
-			w.relabel(at.Field(i).Name).diff(av.Field(i), bv.Field(i))
+			// If a field is exported. See: https://golang.org/src/reflect/type.go?s=20439:20967#L726
+			if at.Field(i).PkgPath == "" {
+				w.relabel(at.Field(i).Name).diff(av.Field(i), bv.Field(i))
+			}
 		}
 	case reflect.Slice:
 		lenA := av.Len()

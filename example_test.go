@@ -1,8 +1,7 @@
-package pretty_test
+package pretty
 
 import (
 	"fmt"
-	"github.com/kr/pretty"
 )
 
 func Example() {
@@ -10,9 +9,9 @@ func Example() {
 		a, b int
 	}
 	var x = []myType{{1, 2}, {3, 4}, {5, 6}}
-	fmt.Printf("%# v", pretty.Formatter(x))
+	fmt.Printf("%# v", Formatter(x))
 	// output:
-	// []pretty_test.myType{
+	// []pretty.myType{
 	//     {a:1, b:2},
 	//     {a:3, b:4},
 	//     {a:5, b:6},
