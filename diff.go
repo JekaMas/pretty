@@ -1,10 +1,13 @@
 package pretty
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"math"
 	"reflect"
+
+	"github.com/kr/pretty"
 )
 
 type sbuf []string
@@ -12,6 +15,40 @@ type sbuf []string
 func (s *sbuf) Write(b []byte) (int, error) {
 	*s = append(*s, string(b))
 	return len(b), nil
+}
+
+const (
+	defaultMessageHeader     = "Obtained:\t\tExpected:"
+	defaultDiffMessageFormat = "\n%v"
+)
+
+//DiffMessage - get fine diff message for two terms
+//Get two format strings. First for header message, second for each diff message
+func DiffMessage(obtained, expected interface{}, format ...string) string {
+	var (
+		failMessage       bytes.Buffer
+		messageHeader     = defaultMessageHeader
+		diffMessageFormat = defaultDiffMessageFormat
+	)
+
+	diffs := pretty.Diff(obtained, expected)
+
+	if len(format) > 0 {
+		messageHeader = format[0]
+	}
+
+	if len(format) > 1 {
+		diffMessageFormat = format[1]
+	}
+
+	if len(diffs) > 0 {
+		failMessage.WriteString(messageHeader)
+		for _, singleDiff := range diffs {
+			failMessage.WriteString(fmt.Sprintf(diffMessageFormat, singleDiff))
+		}
+	}
+
+	return failMessage.String()
 }
 
 // Diff returns a slice where each element describes

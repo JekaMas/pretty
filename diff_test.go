@@ -63,6 +63,18 @@ func TestDiff(t *testing.T) {
 	}
 }
 
+func TestDiffMessage(t *testing.T) {
+	v1 := []int{0, 1, 2, 3}
+	v2 := []int{0, 1, 4}
+
+	if DiffMessage(v1, v1) != "" {
+		t.FailNow()
+	}
+	if DiffMessage(v1, v2) == "" {
+		t.FailNow()
+	}
+}
+
 func diffdiff(t *testing.T, got, exp []string) {
 	minus(t, "missing:", got, exp)
 	minus(t, "unexpected:", exp, got)
