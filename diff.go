@@ -6,8 +6,6 @@ import (
 	"io"
 	"math"
 	"reflect"
-
-	"github.com/kr/pretty"
 )
 
 type sbuf []string
@@ -31,7 +29,7 @@ func DiffMessage(obtained, expected interface{}, format ...string) string {
 		diffMessageFormat = defaultDiffMessageFormat
 	)
 
-	diffs := pretty.Diff(obtained, expected)
+	diffs := Diff(obtained, expected)
 
 	if len(format) > 0 {
 		messageHeader = format[0]
